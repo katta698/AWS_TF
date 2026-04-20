@@ -33,14 +33,14 @@ resource "aws_security_group" "web_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  # SSH (be careful in real world)
+    cidr_blocks = ["0.0.0.0/0"] # SSH (be careful in real world)
   }
 
   ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  # HTTP
+    cidr_blocks = ["0.0.0.0/0"] # HTTP
   }
 
   egress {
@@ -57,9 +57,9 @@ resource "aws_security_group" "web_sg" {
 
 # Create an EC2 Instance
 resource "aws_instance" "web_server" {
-  ami           = "ami-0c02fb55956c7d316" # Amazon Linux 2 (check region)
-  instance_type = "t2.micro"
-  subnet_id     = aws_subnet.main_subnet.id
+  ami                    = "ami-0c02fb55956c7d316" # Amazon Linux 2 (check region)
+  instance_type          = "t2.micro"
+  subnet_id              = aws_subnet.main_subnet.id
   vpc_security_group_ids = [aws_security_group.web_sg.id]
 
   tags = {
