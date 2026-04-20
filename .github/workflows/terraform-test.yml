@@ -11,17 +11,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Get my code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Terraform
+      - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-      - name: Terraform Init
+      - name: Init
         run: terraform init
 
-      - name: Check Formatting
+      - name: Format
         run: terraform fmt -check
 
-      - name: Validate Terraform
+      - name: Validate
         run: terraform validate
+
+      - name: Plan
+        run: terraform plan
+
+      - name: Show Outputs
+        run: terraform output
