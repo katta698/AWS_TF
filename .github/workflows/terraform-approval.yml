@@ -1,0 +1,51 @@
+name: Terraform Deploy with Approval
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+
+  # 🟡 PLAN STAGE
+  plan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      # ⚠️ You will add AWS auth later
+      # Skipping for now if not configured
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+
+  # 🔵 APPLY STAGE (requires approval)
+  apply:
+    needs: plan
+    runs-on: ubuntu-latest
+
+    environment:
+      name: production   # 👈 THIS CREATES APPROVAL GATE
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
